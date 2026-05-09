@@ -1,7 +1,8 @@
-create table three_column_table(
-    id integer primary key,
-    is_active Boolean,
-    is_admin boolean
+create table bank_accounts(
+    id bigint primary key,
+    balance numeric(20, 2),
+    interest_rate numeric(5, 2),
+    number_of_owners smallint
 );
 
 
@@ -9,14 +10,15 @@ create table three_column_table(
 
 
 
--- Do not modify below this line --
-INSERT INTO three_column_table (id, is_active, is_admin) 
-  VALUES (1, TRUE, FALSE),
-         (2, true, false),
-         (3, 't', 'f'),
-         (4, 'y', 'n'),
-         (5, 'yes', 'no'),
-         (6, 'on', 'off'),
-         (7, '1', '0');
 
-SELECT * FROM three_column_table;
+-- Do not modify below this line --
+INSERT INTO bank_accounts (id, balance, interest_rate, number_of_owners) VALUES
+    (1, 123451234512345123.45, 123.45, 1);
+
+SELECT 
+    ba.*,
+    (SELECT STRING_AGG(column_name || ' ' || data_type || CASE WHEN numeric_precision IS NOT NULL THEN '(' || numeric_precision || ',' || numeric_scale || ')' ELSE '' END, ', ')
+     FROM information_schema.columns 
+     WHERE table_name = 'bank_accounts') AS column_types
+FROM 
+    bank_accounts ba;
